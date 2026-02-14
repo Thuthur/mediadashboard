@@ -122,4 +122,63 @@ export default function Dashboard() {
               <div style={{ fontSize: 32, fontWeight: 700, fontFamily: "'DM Mono',monospace", color: st.color, lineHeight: 1 }}>
                 {latest[st.key] ?? "—"} <span style={{ fontSize: 14, color: "#5b7aa8", fontWeight: 400 }}>{st.unit}</span>
               </div>
-              <div style={{ fontS
+              <div style={{ fontSize: 12, color: "#5b7aa8", fontFamily: "'DM Mono',monospace" }}>↔ Stable</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Window controls */}
+        <div style={s.controls}>
+          <span style={{ fontSize: 13, color: "#5b7aa8", fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Fenêtre :</span>
+          {WINDOWS.map(w => (
+            <button key={w.value} className={`filter-btn${window_ === w.value ? " active" : ""}`} onClick={() => setWindow(w.value)}>
+              {w.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Charts */}
+        <div style={s.chartsGrid}>
+          {CHARTS.map(c => (
+            <div key={c.key} className="chart-card" style={s.chartCard}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: 15 }}>{c.label}</div>
+                  <div style={{ color: "#5b7aa8", fontSize: 12, marginTop: 2 }}>{c.subtitle} — {c.unit}</div>
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontSize: 24, fontWeight: 700, fontFamily: "'DM Mono',monospace", color: c.color }}>
+                    {latest[c.key] ?? "—"}
+                  </div>
+                  <div style={{ fontSize: 11, color: "#5b7aa8" }}>{c.unit} actuel</div>
+                </div>
+              </div>
+              <ResponsiveContainer width="100%" height={180}>
+                <LineChart data={sliced}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(56,139,253,0.06)" />
+                  <XAxis dataKey="t" tick={{ fill: "#5b7aa8", fontSize: 10, fontFamily: "'DM Mono',monospace" }} />
+                  <YAxis domain={[c.min, c.max]} tick={{ fill: "#5b7aa8", fontSize: 10, fontFamily: "'DM Mono',monospace" }} />
+                  <Tooltip contentStyle={{ background: "#0d1628", border: "1px solid rgba(56,139,253,0.3)", color: "#e2eaf8", fontFamily: "'DM Mono',monospace" }} />
+                  <defs>
+                    <linearGradient id={`fill-${c.key}`} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={c.color} stopOpacity={0.2} />
+                      <stop offset="95%" stopColor={c.color} stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <Line type="monotone" dataKey={c.key} stroke={c.color} strokeWidth={2} dot={false} isAnimationActive={false} fill={`url(#fill-${c.key})`} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          ))}
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer style={s.footer}>
+        <span>MediChart v1.0</span>
+        <span>{clock}</span>
+        <span>Données simulées</span>
+      </footer>
+    </>
+  );
+}
