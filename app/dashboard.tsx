@@ -50,7 +50,7 @@ export default function Dashboard() {
         🫀 MediChart — <span style={{ color: "#06d6a0" }}>Tableau de bord</span>
       </h1>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px" }}>
         {charts.map(c => (
           <div key={c.key} style={{ background: "#0d1628", border: "1px solid rgba(56,139,253,0.15)", borderRadius: "16px", padding: "24px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
