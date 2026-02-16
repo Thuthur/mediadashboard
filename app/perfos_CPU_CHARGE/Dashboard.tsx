@@ -88,7 +88,7 @@ export default function PerformanceDashboard() {
     const timeMap: Record<number, Record<string, number>> = {};
     allFiles.forEach(file => {
       file.rows.forEach(row => {
-        const t = row["Heure programme"];
+        const t = row["Temps"];
         if (!timeMap[t]) timeMap[t] = { Temps: t };
         file.columns.forEach(col => {
           const key = `${file.name}__${col}`;
@@ -444,7 +444,7 @@ export default function PerformanceDashboard() {
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(56,139,253,0.06)" />
                     <XAxis
-                      dataKey="Heure programme"
+                      dataKey="Temps"
                       tick={{ fill:"#5b7aa8", fontSize:11, fontFamily:"'DM Mono',monospace" }}
                       label={{ value:"Temps (s)", position:"insideBottom", offset:-4, fill:"#5b7aa8", fontSize:12 }}
                     />
