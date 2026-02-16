@@ -29,7 +29,7 @@ const COLORS = [
 
 // ─── Détecte si une colonne est un indicateur principal
 function isMainIndicator(col: string): boolean {
-  return !!(col.match(/^Indicateur\d+$/i) || col === "IDLE");
+  return !!(col.match(/^Indicateur\d+$/i) || col === "CHARGE_TOTALE");
 }
 
 // ─── Groupement des colonnes par indicateur ──────────
@@ -37,7 +37,7 @@ function groupColumns(columns: string[]): Group[] {
   const groups: Group[] = [];
 
   const standalone = columns.filter(col => {
-    const isIndicateur = col.match(/^Indicateur\d+$/i) || col === "IDLE";
+    const isIndicateur = col.match(/^Indicateur\d+$/i) || col === "CHARGE_TOTALE";
     const isTache = col.match(/Indicateur\d+/i) && col.match(/Tache/i);
     return !isIndicateur && !isTache;
   });
@@ -88,7 +88,7 @@ export default function PerformanceDashboard() {
     const timeMap: Record<number, Record<string, number>> = {};
     allFiles.forEach(file => {
       file.rows.forEach(row => {
-        const t = row["Temps"];
+        const t = row["Heure programme"];
         if (!timeMap[t]) timeMap[t] = { Temps: t };
         file.columns.forEach(col => {
           const key = `${file.name}__${col}`;
@@ -111,11 +111,11 @@ export default function PerformanceDashboard() {
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const json: any[] = XLSX.utils.sheet_to_json(sheet);
         const columns = Object.keys(json[0]).filter(
-          col => col !== "Numéro Mesure" && col !== "Temps"
+          col => col !== "Numéro de mesure" && col !== "Heure programme"
         );
         const rows = json.map(row => {
           const cleaned: Record<string, number> = {
-            Temps: parseFloat(String(row["Temps"]).replace(",", ".")),
+            Temps: parseFloat(String(row["Heure programme"]).replace(",", ".")),
           };
           columns.forEach(col => {
             cleaned[col] = parseFloat(String(row[col]).replace(",", "."));
@@ -444,7 +444,7 @@ export default function PerformanceDashboard() {
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(56,139,253,0.06)" />
                     <XAxis
-                      dataKey="Temps"
+                      dataKey="Heure programme"
                       tick={{ fill:"#5b7aa8", fontSize:11, fontFamily:"'DM Mono',monospace" }}
                       label={{ value:"Temps (s)", position:"insideBottom", offset:-4, fill:"#5b7aa8", fontSize:12 }}
                     />
